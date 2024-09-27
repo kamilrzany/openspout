@@ -18,8 +18,8 @@ final class ColumnWidth
         public readonly int $start,
         public readonly int $end,
         public readonly float $width,
-		public readonly ?int $outlineLevel = null,
-		public readonly bool $collapsed = false,
-		public readonly bool $hidden = false
+        public readonly ?int $outlineLevel = null,
+        public readonly bool $collapsed = false,
+        public readonly bool $hidden = false
     ) {}
 }

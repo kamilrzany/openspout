@@ -24,7 +24,7 @@ abstract class AbstractOptions
         $this->DEFAULT_ROW_STYLE = new Style();
     }
 
-     /**
+    /**
      * @param positive-int ...$columns One or more columns with this width
      */
     final public function setColumnWidth(float $width, ?int $outlineLevel = null, bool $collapsed = false, bool $hidden = false, int ...$columns): void
