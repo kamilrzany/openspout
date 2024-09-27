@@ -367,6 +367,42 @@ final class SheetTest extends TestCase
         self::assertStringContainsString('<col min="1" max="3" width="100" customWidth="true"', $xmlContents, 'No expected column width definition found in sheet');
     }
 
+    public function testWritesColumnWidthsWithOutlineLevelsAndAttributes(): void
+    {
+        $fileName = 'test_column_widths_with_outline_levels.xlsx';
+        $resourcePath = (new TestUsingResource())->getGeneratedResourcePath($fileName);
+
+        $options = new Options();
+        $options->setTempFolder((new TestUsingResource())->getTempFolderPath());
+        $writer = new Writer($options);
+        $writer->openToFile($resourcePath);
+        $writer->addRow(Row::fromValues(['xlsx--11', 'xlsx--12', 'xlsx--13', 'xlsx--14', 'xlsx--15', 'xlsx--16']));
+        $sheet = $writer->getCurrentSheet();
+        
+        // Set columns 1-3 with outline level 1
+        $sheet->setColumnWidth(50.0, 1, false, false, 1, 2, 3);
+        
+        // Set columns 4-5 with outline level 2, collapsed
+        $sheet->setColumnWidth(75.0, 2, true, false, 4, 5);
+        
+        // Set column 6 with outline level 1, hidden
+        $sheet->setColumnWidth(100.0, 1, false, true, 6);
+        
+        $writer->close();
+
+        $pathToWorkbookFile = $resourcePath.'#xl/worksheets/sheet1.xml';
+        $xmlContents = file_get_contents('zip://'.$pathToWorkbookFile);
+
+        self::assertNotFalse($xmlContents);
+        self::assertStringContainsString('<cols>', $xmlContents, 'No cols tag found in sheet');
+        self::assertStringContainsString('<col min="1" max="2" width="50" customWidth="true" outlineLevel="1"/>', $xmlContents, 'No expected column width definition with outline level 1 found in sheet for columns 1-2');
+        self::assertStringContainsString('<col min="3" max="3" width="50" customWidth="true"/>', $xmlContents, 'No expected column width definition found in sheet for column 3');
+        self::assertStringContainsString('<col min="4" max="4" width="75" customWidth="true" outlineLevel="2" collapsed="true"/>', $xmlContents, 'No expected column width definition with outline level 2 and collapsed attribute found in sheet for column 4');
+        self::assertStringContainsString('<col min="5" max="5" width="75" customWidth="true"/>', $xmlContents, 'No expected column width definition found in sheet for column 5');
+        self::assertStringContainsString('<col min="6" max="5" width="100" customWidth="true" outlineLevel="1" hidden="true"/>', $xmlContents, 'No expected column width definition with outline level 1 and hidden attribute found in sheet for column 6');
+        self::assertStringContainsString('<col min="6" max="6" width="100" customWidth="true"/>', $xmlContents, 'No expected column width definition found in sheet for the last column');
+    }
+
     public function testCanWriteAFormula(): void
     {
         $fileName = 'test_formula.xlsx';
