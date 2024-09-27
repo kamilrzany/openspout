@@ -187,8 +187,8 @@ $writer = new Writer($options);
 $writer->openToFile('/tmp/file.xlsx');
 $writer->addRow(Row::fromValues(['foo', 'bar', 'baz']));
 
-$options->setColumnWidth(10, 1);
-$options->setColumnWidthForRange(12, 2, 3);
+$options->setColumnWidth(10, null, false, false, 1);
+$options->setColumnWidthForRange(12, null, false, false, 2, 3);
 $writer->close();
 ```
 
@@ -204,11 +204,59 @@ $writer->openToFile('/tmp/file.xlsx');
 $writer->addRow(Row::fromValues(['foo', 'bar', 'baz']));
 
 $sheet = $writer->getCurrentSheet();
-$sheet->setColumnWidth(10, 1);
+$sheet->setColumnWidth(10, null, false, false1);
 $sheet->setColumnWidthForRange(12, 2, 3);
 
 $writer->close();
 ```
+
+## Column Grouping and Outlining (XLSX writer)
+
+OpenSpout supports setting column attributes, including outline levels and collapsing column groups. This feature is useful for organizing and summarizing data in Excel spreadsheets.
+
+### Setting Column Attributes
+
+You can set column attributes using the `setColumnWidth` method on the `Sheet` object. The method signature includes parameters for outline-related attributes:
+
+```php
+public function setColumnWidth(float $width, ?int $outlineLevel = null, bool $collapsed = false, bool $hidden = false, int ...$columns): void
+```
+
+- `$width`: The width of the column(s)
+- `$outlineLevel`: The outline level (1-7, null for no outline)
+- `$collapsed`: Whether the column group is collapsed
+- `$hidden`: Whether the column is hidden
+- `$columns`: One or more column indexes to apply these attributes to
+
+### Example Usage
+
+Here's an example of how to use the column grouping and outlining feature:
+
+```php
+$sheet = $writer->getCurrentSheet();
+
+// Set width 15, outline level 1 for columns 1-3
+$sheet->setColumnWidth(15, 1, false, false, 1, 2, 3);
+
+// Set width 20, outline level 2, collapsed, for columns 4-6
+$sheet->setColumnWidth(20, 2, true, false, 4, 5, 6);
+
+// Set width 10, outline level 1, for columns 7-9
+$sheet->setColumnWidth(10, 1, false, false, 7, 8, 9);
+```
+
+This will create a column structure like this:
+- Columns 1-3: Width 15, Outline Level 1
+- Columns 4-6: Width 20, Outline Level 2, Collapsed
+- Columns 7-9: Width 10, Outline Level 1
+
+### Notes
+
+- The outline level must be between 1 and 7. Null or 0 means no outline.
+- When a range of columns is collapsed, the last column in the range will be treated as a separator and will not be part of the collapsed group.
+- Hidden columns will not be visible in Excel but can still be accessed programmatically.
+
+Using this feature, you can create complex column groupings and outlines in your Excel documents, helping to organize and present your data more effectively.
 
 For XLSX readers, you can also retrieve the column widths:
 

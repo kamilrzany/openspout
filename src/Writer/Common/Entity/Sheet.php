@@ -172,7 +172,7 @@ final class Sheet
     /**
      * @param positive-int ...$columns One or more columns with this width
      */
-    public function setColumnWidth(float $width, int ...$columns): void
+    public function setColumnWidth(float $width, ?int $outlineLevel = null, bool $collapsed = false, bool $hidden = false, int ...$columns): void
     {
         // Gather sequences
         $sequence = [];
@@ -181,23 +181,31 @@ final class Sheet
             if ($sequenceLength > 0) {
                 $previousValue = $sequence[$sequenceLength - 1];
                 if ($column !== $previousValue + 1) {
-                    $this->setColumnWidthForRange($width, $sequence[0], $previousValue);
+                    $this->setColumnWidthForRange($width, $sequence[0], $previousValue, $outlineLevel, $collapsed, $hidden);
                     $sequence = [];
                 }
             }
             $sequence[] = $column;
         }
-        $this->setColumnWidthForRange($width, $sequence[0], $sequence[\count($sequence) - 1]);
+
+        $this->setColumnWidthForRange($width, $sequence[0], $sequence[\count($sequence) - 1], $outlineLevel, $collapsed, $hidden);
     }
 
     /**
      * @param float        $width The width to set
      * @param positive-int $start First column index of the range
      * @param positive-int $end   Last column index of the range
+     * @param int|null $outlineLevel Outline level (1-7)
+     * @param bool $collapsed Whether the column group is collapsed
+     * @param bool $hidden Whether the column is hidden
      */
-    public function setColumnWidthForRange(float $width, int $start, int $end): void
+    public function setColumnWidthForRange(float $width, int $start, int $end, ?int $outlineLevel = null, bool $collapsed = false, bool $hidden = false): void
     {
-        $this->COLUMN_WIDTHS[] = new ColumnWidth($start, $end, $width);
+        if (null !== $outlineLevel && ($outlineLevel < 1 || $outlineLevel > 7)) {
+            throw new \InvalidArgumentException('Outline level must be between 1 and 7');
+        }
+
+        $this->COLUMN_WIDTHS[] = new ColumnWidth($start, $end, $width, $outlineLevel, $collapsed, $hidden);
     }
 
     /**

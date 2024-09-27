@@ -535,8 +535,33 @@ final class FileSystemHelper implements FileSystemWithRootFolderHelperInterface
         $xml = '<cols>';
 
         foreach ($widths as $columnWidth) {
-            $xml .= '<col min="'.$columnWidth->start.'" max="'.$columnWidth->end.'" width="'.$columnWidth->width.'" customWidth="true"/>';
+            // Always add the first part of the column range
+            $adjustedMax = (null !== $columnWidth->outlineLevel) ? $columnWidth->end - 1 : $columnWidth->end;
+
+            // Add the column (adjusted max if outlineLevel is set)
+            $xml .= '<col min="' . $columnWidth->start . '" max="' . $adjustedMax . '" width="' . $columnWidth->width . '" customWidth="true"';
+
+            if (null !== $columnWidth->outlineLevel) {
+                $xml .= ' outlineLevel="' . $columnWidth->outlineLevel . '"';
+            }
+
+            if ($columnWidth->collapsed) {
+                $xml .= ' collapsed="true"';
+            }
+
+            if ($columnWidth->hidden) {
+                $xml .= ' hidden="true"';
+            }
+
+            $xml .= '/>';
+
+            // If outlineLevel is set, add the second column for the last one in the range
+            if (null !== $columnWidth->outlineLevel) {
+                $lastColumn = $columnWidth->end;
+                $xml .= '<col min="' . $lastColumn . '" max="' . $lastColumn . '" width="' . $columnWidth->width . '" customWidth="true"/>';
+            }
         }
+
         $xml .= '</cols>';
 
         return $xml;

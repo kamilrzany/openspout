@@ -149,7 +149,7 @@ final class SheetTest extends TestCase
         $writer = new Writer($options);
         $writer->openToFile($resourcePath);
         $writer->addRow(Row::fromValues(['xlsx--11', 'xlsx--12']));
-        $options->setColumnWidth(100.0, 1);
+        $options->setColumnWidth(100.0, null, false, false, 1);
         $writer->close();
 
         $pathToWorkbookFile = $resourcePath.'#xl/worksheets/sheet1.xml';
@@ -170,7 +170,7 @@ final class SheetTest extends TestCase
         $writer = new Writer($options);
         $writer->openToFile($resourcePath);
         $writer->addRow(Row::fromValues(['xlsx--11', 'xlsx--12', 'xlsx--13']));
-        $options->setColumnWidth(100.0, 1, 2, 3);
+        $options->setColumnWidth(100.0, null, false, false, 1, 2, 3);
         $writer->close();
 
         $pathToWorkbookFile = $resourcePath.'#xl/worksheets/sheet1.xml';
@@ -191,8 +191,8 @@ final class SheetTest extends TestCase
         $writer = new Writer($options);
         $writer->openToFile($resourcePath);
         $writer->addRow(Row::fromValues(['xlsx--11', 'xlsx--12', 'xlsx--13', 'xlsx--14', 'xlsx--15', 'xlsx--16']));
-        $options->setColumnWidth(50.0, 1, 3, 4, 6);
-        $options->setColumnWidth(100.0, 2, 5);
+        $options->setColumnWidth(50.0, null, false, false, 1, 3, 4, 6);
+        $options->setColumnWidth(100.0, null, false, false, 2, 5);
         $writer->close();
 
         $pathToWorkbookFile = $resourcePath.'#xl/worksheets/sheet1.xml';
@@ -239,7 +239,7 @@ final class SheetTest extends TestCase
         $writer->openToFile($resourcePath);
         $writer->addRow(Row::fromValues(['xlsx--11', 'xlsx--12']));
         $sheet = $writer->getCurrentSheet();
-        $sheet->setColumnWidth(100.0, 1);
+        $sheet->setColumnWidth(100.0, null, false, false, 1);
         $writer->close();
 
         $pathToWorkbookFile = $resourcePath.'#xl/worksheets/sheet1.xml';
@@ -261,7 +261,7 @@ final class SheetTest extends TestCase
         $writer->openToFile($resourcePath);
         $writer->addRow(Row::fromValues(['xlsx--11', 'xlsx--12', 'xlsx--13']));
         $sheet = $writer->getCurrentSheet();
-        $sheet->setColumnWidth(100.0, 1, 2, 3);
+        $sheet->setColumnWidth(100.0, null, false, false, 1, 2, 3);
         $writer->close();
 
         $pathToWorkbookFile = $resourcePath.'#xl/worksheets/sheet1.xml';
@@ -283,8 +283,8 @@ final class SheetTest extends TestCase
         $writer->openToFile($resourcePath);
         $writer->addRow(Row::fromValues(['xlsx--11', 'xlsx--12', 'xlsx--13', 'xlsx--14', 'xlsx--15', 'xlsx--16']));
         $sheet = $writer->getCurrentSheet();
-        $sheet->setColumnWidth(50.0, 1, 3, 4, 6);
-        $sheet->setColumnWidth(100.0, 2, 5);
+        $sheet->setColumnWidth(50.0, null, false, false, 1, 3, 4, 6);
+        $sheet->setColumnWidth(100.0, null, false, false, 2, 5);
         $writer->close();
 
         $pathToWorkbookFile = $resourcePath.'#xl/worksheets/sheet1.xml';
@@ -331,9 +331,9 @@ final class SheetTest extends TestCase
         $writer = new Writer($options);
         $writer->openToFile($resourcePath);
         $writer->addRow(Row::fromValues(['xlsx--11', 'xlsx--12']));
-        $options->setColumnWidth(50.0, 1);
+        $options->setColumnWidth(50.0, null, false, false, 1);
         $sheet = $writer->getCurrentSheet();
-        $sheet->setColumnWidth(100.0, 1);
+        $sheet->setColumnWidth(100.0, null, false, false, 1);
         $writer->close();
 
         $pathToWorkbookFile = $resourcePath.'#xl/worksheets/sheet1.xml';
@@ -351,12 +351,12 @@ final class SheetTest extends TestCase
 
         $options = new Options();
         $options->setTempFolder((new TestUsingResource())->getTempFolderPath());
-        $options->setColumnWidth(50.0, 1, 2, 3);
+        $options->setColumnWidth(50.0, null, false, false, 1, 2, 3);
         $writer = new Writer($options);
         $writer->openToFile($resourcePath);
         $writer->addRow(Row::fromValues(['xlsx--11', 'xlsx--12', 'xlsx--13']));
         $sheet = $writer->getCurrentSheet();
-        $sheet->setColumnWidth(100.0, 1, 2, 3);
+        $sheet->setColumnWidth(100.0, null, false, false, 1, 2, 3);
         $writer->close();
 
         $pathToWorkbookFile = $resourcePath.'#xl/worksheets/sheet1.xml';
