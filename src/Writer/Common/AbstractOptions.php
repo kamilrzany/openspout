@@ -24,7 +24,10 @@ abstract class AbstractOptions
         $this->DEFAULT_ROW_STYLE = new Style();
     }
 
-    public function setColumnWidth(float $width, ?int $outlineLevel = null, bool $collapsed = false, bool $hidden = false, int ...$columns): void
+     /**
+     * @param positive-int ...$columns One or more columns with this width
+     */
+    final public function setColumnWidth(float $width, ?int $outlineLevel = null, bool $collapsed = false, bool $hidden = false, int ...$columns): void
     {
         // Gather sequences
         $sequence = [];
@@ -39,7 +42,6 @@ abstract class AbstractOptions
             }
             $sequence[] = $column;
         }
-
         $this->setColumnWidthForRange($width, $sequence[0], $sequence[\count($sequence) - 1], $outlineLevel, $collapsed, $hidden);
     }
 
@@ -51,7 +53,7 @@ abstract class AbstractOptions
      * @param bool $collapsed Whether the column group is collapsed
      * @param bool $hidden Whether the column is hidden
      */
-    public function setColumnWidthForRange(float $width, int $start, int $end, ?int $outlineLevel = null, bool $collapsed = false, bool $hidden = false): void
+    final public function setColumnWidthForRange(float $width, int $start, int $end, ?int $outlineLevel = null, bool $collapsed = false, bool $hidden = false): void
     {
         if (null !== $outlineLevel && ($outlineLevel < 1 || $outlineLevel > 7)) {
             throw new \InvalidArgumentException('Outline level must be between 1 and 7');

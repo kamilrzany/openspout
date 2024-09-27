@@ -187,7 +187,6 @@ final class Sheet
             }
             $sequence[] = $column;
         }
-
         $this->setColumnWidthForRange($width, $sequence[0], $sequence[\count($sequence) - 1], $outlineLevel, $collapsed, $hidden);
     }
 
