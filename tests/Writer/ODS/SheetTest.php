@@ -90,7 +90,7 @@ final class SheetTest extends TestCase
         $writer = new Writer($options);
         $writer->openToFile($resourcePath);
         $writer->addRow(Row::fromValues(['ods--11', 'ods--12']));
-        $options->setColumnWidth(100.0, null, false, false, 1);
+        $options->setColumnWidth(100.0, 1);
         $writer->close();
 
         $pathToWorkbookFile = $resourcePath.'#content.xml';
@@ -111,8 +111,8 @@ final class SheetTest extends TestCase
         $writer = new Writer($options);
         $writer->openToFile($resourcePath);
         $writer->addRow(Row::fromValues(['ods--11', 'ods--12', 'ods--13', 'ods--14', 'ods--15', 'ods--16']));
-        $options->setColumnWidth(50.0, null, false, false, 1, 3, 4, 6);
-        $options->setColumnWidth(100.0, null, false, false, 2, 5);
+        $options->setColumnWidth(50.0, 1, 3, 4, 6);
+        $options->setColumnWidth(100.0, 2, 5);
         $writer->close();
 
         $pathToWorkbookFile = $resourcePath.'#content.xml';
