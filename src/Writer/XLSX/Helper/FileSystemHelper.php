@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use OpenSpout\Common\Exception\IOException;
 use OpenSpout\Common\Helper\Escaper\XLSX;
 use OpenSpout\Common\Helper\FileSystemHelper as CommonFileSystemHelper;
+use OpenSpout\Writer\Common\ColumnAttributes;
 use OpenSpout\Writer\Common\Entity\Sheet;
 use OpenSpout\Writer\Common\Entity\Worksheet;
 use OpenSpout\Writer\Common\Helper\CellHelper;
@@ -535,10 +536,38 @@ final class FileSystemHelper implements FileSystemWithRootFolderHelperInterface
         $xml = '<cols>';
 
         foreach ($widths as $columnWidth) {
-            $xml .= '<col min="'.$columnWidth->start.'" max="'.$columnWidth->end.'" width="'.$columnWidth->width.'" customWidth="true"/>';
+            $columnAttributes = $this->getXMLFragmentForColumnAttributes($columnWidth->getColumnAttributes());
+            $xml .= '<col min="'.$columnWidth->start.'" max="'.$columnWidth->end.'" width="'.$columnWidth->width.'" customWidth="true"'.$columnAttributes.'/>';
+        
+            if (null !== $columnWidth->getColumnAttributes()->getOutlineLevel()) {
+                $xml .= '<col min="'.$columnWidth->end.'" max="'.$columnWidth->end.'" width="'.$columnWidth->width.'" customWidth="true"/>';
+            }
         }
         $xml .= '</cols>';
 
+        return $xml;
+    }
+
+    private function getXMLFragmentForColumnAttributes(ColumnAttributes $columnAttributes): string
+    {
+        if ($columnAttributes->isEmpty()) {
+            return '';
+        }
+
+        $xml = '';
+
+        if (null !== $columnAttributes->getOutlineLevel()) {
+            $xml .= ' outlineLevel="'.$columnAttributes->getOutlineLevel().'"';
+        }
+        
+        if ($columnAttributes->isCollapsed()) {
+            $xml .= ' collapsed="true"';
+        }
+
+        if ($columnAttributes->isHidden()) {
+            $xml .= ' hidden="true"';
+        }
+        
         return $xml;
     }
 
