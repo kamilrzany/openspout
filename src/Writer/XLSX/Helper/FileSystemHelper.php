@@ -538,7 +538,7 @@ final class FileSystemHelper implements FileSystemWithRootFolderHelperInterface
         foreach ($widths as $columnWidth) {
             $columnAttributes = $this->getXMLFragmentForColumnAttributes($columnWidth->getColumnAttributes());
             $xml .= '<col min="'.$columnWidth->start.'" max="'.$columnWidth->end.'" width="'.$columnWidth->width.'" customWidth="true"'.$columnAttributes.'/>';
-        
+
             // If the column has an outline level set, we add an empty <col> element.
             // This is necessary to ensure proper formatting in the generated XML,
             // as some applications may expect an empty column entry for visual separation
@@ -560,7 +560,7 @@ final class FileSystemHelper implements FileSystemWithRootFolderHelperInterface
         if (null !== $columnAttributes->getOutlineLevel()) {
             $xml .= ' outlineLevel="'.$columnAttributes->getOutlineLevel().'"';
         }
-        
+
         if ($columnAttributes->isCollapsed()) {
             $xml .= ' collapsed="true"';
         }
@@ -568,7 +568,7 @@ final class FileSystemHelper implements FileSystemWithRootFolderHelperInterface
         if ($columnAttributes->isHidden()) {
             $xml .= ' hidden="true"';
         }
-        
+
         return $xml;
     }
 
